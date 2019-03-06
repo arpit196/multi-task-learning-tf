@@ -39,7 +39,7 @@ def stacked_multihead_attention2(x, num_blocks, num_heads, use_residual, is_trai
     with tf.variable_scope('stacked_multihead_attention2', reuse=reuse):
         for i in range(num_blocks):
             with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
-                x, attentions = multihead_attention(x, x, x, use_residual, is_training, num_heads=num_heads, reuse=reuse)
+                x, attentions = multihead_attention2(x, x, x, use_residual, is_training, num_heads=num_heads, reuse=reuse)
                 x = feed_forward(x, num_hiddens=num_hiddens, activation=tf.nn.relu, reuse=reuse)
 return x, attentions
 
@@ -72,7 +72,7 @@ def stacked_multihead_attention3(x, num_blocks, num_heads, use_residual, is_trai
     with tf.variable_scope('stacked_multihead_attention3', reuse=reuse):
         for i in range(num_blocks):
             with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
-                x, attentions = multihead_attention(x, x, x, use_residual, is_training, num_heads=num_heads, reuse=reuse)
+                x, attentions = multihead_attention3(x, x, x, use_residual, is_training, num_heads=num_heads, reuse=reuse)
                 x = feed_forward(x, num_hiddens=num_hiddens, activation=tf.nn.relu, reuse=reuse)
 return x, attentions
 
