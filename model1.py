@@ -162,14 +162,14 @@ class Model(object):
             
         with tf.name_scope("cola"):
             self.trasnform_output=stacked_multihead_attention2(self.base_cola,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.lm_logits = tf.layers.dense(self.transform_output, vocabulary_size)
+            self.lm_logitscola = tf.layers.dense(self.transform_output, vocabulary_size)
 
         with tf.name_scope("nli"):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
             self.transform_output21=stacked_multihead_attention2(self.base_nli1,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.clf_logits = tf.layers.dense(self.transform_output2, num_class)
             self.transform_output22=stacked_multihead_attention2(self.base_nli2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
             self.transform_output23=stacked_multihead_attention2()
+            self.clf_logitsnli = tf.layers.dense(self.transform_output23, num_class)
             
         with tf.name_scope("sts"):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
@@ -177,6 +177,7 @@ class Model(object):
             self.clf_logits = tf.layers.dense(self.transform_output2, num_class)
             self.transform_output32=stacked_multihead_attention2(self.base_sts2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
             self.transform_output33=stacked_multihead_attention2()
+            self.clf_logitssts = tf.layers.dense(self.transform_output33, num_class)
             
         with tf.name_scope("loss"):
             self.lm_loss = tf.contrib.seq2seq.sequence_loss(
@@ -185,14 +186,18 @@ class Model(object):
                 weights=tf.sequence_mask(self.x_len, args.max_document_len, dtype=tf.float32),
                 average_across_timesteps=True,
                 average_across_batch=True)
-            self.clf_loss = tf.reduce_mean(
-                tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logits, labels=self.clf_y))
             
-            self.clf_sts_loss = tf.reduce_mean(
-                tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logits, labels=self.clf_y))
+            self.clf_loss_nli = tf.reduce_mean(
+                tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logits, labels=self.clf_nli))
             
-            self.total_loss = self.lm_loss + self.clf_loss
-                tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logits, labels=self.clf_y))
+            self.clf_loss_sts = tf.reduce_mean(
+                tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logitssts, labels=self.clf_sts))
+            
+            self.clf_loss_cola = tf.reduce_mean(
+                tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logitscola, labels=self.clf_cola))
+           
+            self.total_loss = self.lm_loss + self.clf_loss_nli + self.clf_loss_sts + self.clf_loss_cola 
+                #tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logits, labels=self.clf_y))
                 
         with tf.name_scope("clf-accuracy"):
             correct_predictions = tf.equal(self.clf_predictions, self.clf_y)
