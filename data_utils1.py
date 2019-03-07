@@ -35,9 +35,11 @@ def build_word_dict():
         train_df_snli=pd.read_csv("snli_1.0/snli_1.0_train.csv",names=["sentence1","sentence2","gold_label"])
         train_df_sts=pd.read_csv("snlitrain.csv",names=["sentence1","sentence2","gold_label"])
         contents = train_df["content"]
-        contents.append()
-        
-        
+        contents.append(train_df_snli["sentence1"])
+        contents.append(train_df_sts["sentence1"])
+        contents.append(train_df_snli["sentence2"])
+        contents.append(train_df_sts["sentence2"])
+       
         words = list()
         for content in contents:
             for word in word_tokenize(clean_str(content)):
@@ -67,11 +69,11 @@ def build_dataset(step, word_dict, max_document_len):
     if step == "train":
         df = pd.read_csv(TRAIN_PATH, names=["class", "title", "content"])
         df_snli=pd.read_csv("snli_1.0/snli_1.0_train.csv",names=["sentence1","sentence2","gold_label"])
-        df_sts=pd.read_csv("snlitrain.csv",names=["sentence1","sentence2","gold_label"])
+        df_sts=pd.read_csv("sts-train.csv",names=["sentence1","sentence2","gold_label"])
     else:
         df = pd.read_csv(TEST_PATH, names=["class", "title", "content"])
         df_snli=pd.read_csv("snli_1.0/snli_1.0_test.csv",names=["sentence1","sentence2","gold_label"])
-        df_sts=pd.read_csv("snlitrain.csv",names=["sentence1","sentence2","gold_label"])
+        df_sts=pd.read_csv("sts-test.csv",names=["sentence1","sentence2","gold_label"])
         
     # Shuffle dataframe
     df = df.sample(frac=1)
