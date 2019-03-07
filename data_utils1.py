@@ -70,6 +70,8 @@ def build_dataset(step, word_dict, max_document_len):
         df = pd.read_csv(TRAIN_PATH, names=["class", "title", "content"])
         df_snli=pd.read_csv("snli_1.0/snli_1.0_train.csv",names=["sentence1","sentence2","gold_label"])
         df_sts=pd.read_csv("sts-train.csv",names=["sentence1","sentence2","gold_label"])
+        df_cola = pd.read_csv("cola_public/raw/in_domain_train.csv",names=["sentence1","sentence2","gold_label"])
+       
     else:
         df = pd.read_csv(TEST_PATH, names=["class", "title", "content"])
         df_snli=pd.read_csv("snli_1.0/snli_1.0_test.csv",names=["sentence1","sentence2","gold_label"])
@@ -110,14 +112,22 @@ def build_dataset(step, word_dict, max_document_len):
     xsts2 = list(map(lambda d: d[:max_document_len], x))
     xsts2 = list(map(lambda d: d + (max_document_len - len(d)) * [word_dict["<pad>"]], x))
     
+    xcola = list(map(lambda d: word_tokenize(clean_str(d)), df_cola.iloc[:,4]))
+    xcola = list(map(lambda d: ["<s>"] + d, data))
+    xcola = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), x))
+    xcola = list(map(lambda d: d[:max_document_len], x))
+    xcola = list(map(lambda d: d + (max_document_len - len(d)) * [word_dict["<pad>"]], x))
+    
     lm_y = list(map(lambda d: d + ["</s>"], data))
     lm_y = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), lm_y))
     lm_y = list(map(lambda d: d[:max_document_len], lm_y))
     lm_y = list(map(lambda d: d + (max_document_len - len(d)) * [word_dict["<pad>"]], lm_y))
     
-    clf_nli = list(map(lambda d: d - 1, list(df["gold_label"])))
+    clf_nli = list(map(lambda d: d - 1, list(df_nli["gold_label"])))
     
-    clf_sts = list(map(lambda d: d - 1, list(df[""])))
+    clf_sts = list(map(lambda d: d - 1, list(df_sts[""])))
+    
+    clf_cola = list(map(lambda d: d, list(df_cola.iloc[:,1])))
 
     clf_y = list(map(lambda d: d - 1, list(df["class"])))
 
