@@ -173,10 +173,10 @@ class Model(object):
             
         with tf.name_scope("sts"):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
-            self.transform_output31=stacked_multihead_attention2(self.base_sts1,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.transform_output31=stacked_multihead_attention3(self.base_sts1,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
             self.clf_logits = tf.layers.dense(self.transform_output2, num_class)
-            self.transform_output32=stacked_multihead_attention2(self.base_sts2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.transform_output33=stacked_multihead_attention2()
+            self.transform_output32=stacked_multihead_attention3(self.base_sts2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.transform_output33=stacked_multihead_attention3()
             self.clf_logitssts = tf.layers.dense(self.transform_output33, num_class)
             
         with tf.name_scope("loss"):
