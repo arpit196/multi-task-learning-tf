@@ -10,6 +10,15 @@ def stacked_multihead_attention(x, num_blocks, num_heads, use_residual, is_train
                 x = feed_forward(x, num_hiddens=num_hiddens, activation=tf.nn.relu, reuse=reuse)
 return x, attentions
 
+def stacked_multihead_attention(x, num_blocks, num_heads, use_residual, is_training, reuse=False):
+    num_hiddens = x.get_shape().as_list()[-1]
+    with tf.variable_scope('stacked_multihead_attention', reuse=reuse):
+        for i in range(num_blocks):
+            with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
+                x, attentions = multihead_attention(x, x, x, use_residual, is_training, num_heads=num_heads, reuse=reuse)
+                x = feed_forward(x, num_hiddens=num_hiddens, activation=tf.nn.relu, reuse=reuse)
+return x, attentions
+
 def multihead_attention(queries, keys, values, use_residual, is_training, num_units=None, num_heads=8, reuse=False):
     with tf.variable_scope('multihead-attention', reuse=reuse):
         if num_units is None:
@@ -117,10 +126,14 @@ class Model(object):
         self.num_hidden = args.num_hidden
 
         self.x = tf.placeholder(tf.int32, [None, args.max_document_len])
-        self.x2 = tf.placeholder(tf.int32, [None, args.max_document_len])
+        self.xnli1=tf.placeholder(tf.int32, [None, args.max_document_len])
+        self.xnli2=tf.placeholder(tf.int32, [None, args.max_document_len])
+        self.xsts1=tf.placeholder(tf.int32, [None, args.max_document_len])
+        self.xsts2 = tf.placeholder(tf.int32, [None, args.max_document_len])
         self.lm_y = tf.placeholder(tf.int32, [None, args.max_document_len])
         self.clf_y = tf.placeholder(tf.int32, [None])
-        self.keep_prob = tf.placeholder(tf.float32, [])
+        self.clf_nli = tf.placeholder(tf.int32, [None])
+        #self.keep_prob = tf.placeholder(tf.float32, [])
 
         self.x_len = tf.reduce_sum(tf.sign(self.x), 1)
 
@@ -128,7 +141,11 @@ class Model(object):
             init_embeddings = tf.random_uniform([vocabulary_size, self.embedding_size])
             embeddings = tf.get_variable("embeddings", initializer=init_embeddings)
             self.x_emb = tf.nn.embedding_lookup(embeddings, self.x)
-            
+            self.xnli1_emb = tf.nn.embedding_lookup(embeddings, self.xnli1)
+            self.xnli2_emb = tf.nn.embedding_lookup(embeddings, self.xnli1)
+            self.sts1_emb = tf.nn.embedding_lookup(embeddings, self.xsts1)
+            self.sts2_emb = tf.nn.embedding_lookup(embeddings, self.xsts2)
+
         '''
         with tf.name_scope("rnn"):
             cell = rnn.MultiRNNCell([self.make_cell() for _ in range(self.num_layers)])
@@ -137,18 +154,29 @@ class Model(object):
         '''
             
         with tf.name_scope("base_transformer"):
-            self.base=stacked_multihead_attention(self.x_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
-
+            self.base_cola=stacked_multihead_attention(self.x_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.base_nli1=stacked_multihead_attention(self.xnli1_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.base_nli2=stacked_multihead_attention(self.xnli2_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.base_sts1=stacked_multihead_attention(self.sts1_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.base_sts2=stacked_multihead_attention(self.sts2_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
+            
         with tf.name_scope("cola"):
-            self.trasnform_output=stacked_multihead_attention2(self.base,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.trasnform_output=stacked_multihead_attention2(self.base_cola,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
             self.lm_logits = tf.layers.dense(self.transform_output, vocabulary_size)
 
-        with tf.name_scope("clf-output"):
+        with tf.name_scope("nli"):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
-            self.transform_output21=stacked_multihead_attention2(self.base,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.transform_output21=stacked_multihead_attention2(self.base_nli1,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
             self.clf_logits = tf.layers.dense(self.transform_output2, num_class)
-            self.transform_output22=stacked_multihead_attention2(self.base2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.transform_output22=stacked_multihead_attention2(self.base_nli2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
             self.transform_output23=stacked_multihead_attention2()
+            
+        with tf.name_scope("sts"):
+            #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
+            self.transform_output31=stacked_multihead_attention2(self.base_sts1,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.clf_logits = tf.layers.dense(self.transform_output2, num_class)
+            self.transform_output32=stacked_multihead_attention2(self.base_sts2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.transform_output33=stacked_multihead_attention2()
             
         with tf.name_scope("loss"):
             self.lm_loss = tf.contrib.seq2seq.sequence_loss(
@@ -159,8 +187,13 @@ class Model(object):
                 average_across_batch=True)
             self.clf_loss = tf.reduce_mean(
                 tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logits, labels=self.clf_y))
+            
+            self.clf_sts_loss = tf.reduce_mean(
+                tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logits, labels=self.clf_y))
+            
             self.total_loss = self.lm_loss + self.clf_loss
-
+                tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logits, labels=self.clf_y))
+                
         with tf.name_scope("clf-accuracy"):
             correct_predictions = tf.equal(self.clf_predictions, self.clf_y)
             self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"))
