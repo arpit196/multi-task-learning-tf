@@ -159,6 +159,7 @@ class Model(object):
         self.embedding_size = args.embedding_size
         self.num_layers = args.num_layers
         self.num_hidden = args.num_hidden
+        self.is_training = True
 
         self.x = tf.placeholder(tf.int32, [None, args.max_document_len])
         self.xcola=tf.placeholder(tf.int32, [None, args.max_document_len])
@@ -208,7 +209,7 @@ class Model(object):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
             self.transform_output21=stacked_multihead_attention2(self.base_nli1,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
             self.transform_output22=stacked_multihead_attention2(self.base_nli2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.transform_output23=stacked_multihead_attention_d(self.base_nli1,self.base_nli2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training))
+            self.transform_output23=stacked_multihead_attention_d(self.base_nli1,self.base_nli2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
             self.clf_logitsnli = tf.layers.dense(self.transform_output23, num_class)
             
         with tf.name_scope("sts"):
@@ -216,7 +217,7 @@ class Model(object):
             self.transform_output31=stacked_multihead_attention3(self.base_sts1,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
             #self.clf_logits = tf.layers.dense(self.transform_output2, num_class)
             self.transform_output32=stacked_multihead_attention3(self.base_sts2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.transform_output33=stacked_multihead_attention_d2(self.base_sts1,self.base_sts2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training))
+            self.transform_output33=stacked_multihead_attention_d2(self.base_sts1,self.base_sts2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
             self.clf_logitssts = tf.layers.dense(self.transform_output33, num_class)
             
         with tf.name_scope("loss"):
