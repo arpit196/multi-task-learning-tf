@@ -32,9 +32,9 @@ def clean_str(text):
 def build_word_dict():
     if not os.path.exists("word_dict.pickle"):
         train_df = pd.read_csv(TRAIN_PATH, names=["class", "title", "content"])
-        train_df_snli=pd.read_csv("content/gdrive/My Drive/snli_1.0/snli_1.0_train.csv",names=["sentence1","sentence2","gold_label"])
-        train_df_sts=pd.read_csv("content/gdrive/My Drive/sts_train.csv")
-        train_df_cola=pd.read_csv("content/gdrive/My Drive/cola_public/raw/in_domain_train.tsv")
+        train_df_snli=pd.read_csv("/content/gdrive/My Drive/snli_1.0_train.txt",names=["sentence1","sentence2","gold_label"])
+        train_df_sts=pd.read_csv("/content/gdrive/My Drive/sts_train.csv",usecols=["score","sent1","sent2"])
+        train_df_cola=pd.read_csv("/content/gdrive/My Drive/cola_public/raw/in_domain_train.tsv")
         
         contents = train_df["content"]
         contents.append(train_df_snli["sentence1"])
