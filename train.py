@@ -2,8 +2,8 @@ import argparse
 import os
 import tensorflow as tf
 import numpy as np
-from model import Model
-from data_utils import download_dbpedia, build_word_dict, build_dataset, batch_iter
+from model1 import Model
+from data_utils1 import download_dbpedia, build_word_dict, build_dataset, batch_iter
 
 
 def train(train_x, train_lm_y, train_clf_y, test_x, test_lm_y, test_clf_y, word_dict, args):
