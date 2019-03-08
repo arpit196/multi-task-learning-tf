@@ -228,7 +228,7 @@ class Model(object):
                 average_across_batch=True)
             
             self.clf_loss_nli = tf.reduce_mean(
-                tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logits, labels=self.clf_nli))
+                tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logitsnli, labels=self.clf_nli))
             
             self.clf_loss_sts = tf.reduce_mean(
                 tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.clf_logitssts, labels=self.clf_sts))
