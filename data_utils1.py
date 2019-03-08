@@ -73,18 +73,18 @@ def build_word_dict():
 def build_dataset(step, word_dict, max_document_len):
     if step == "train":
         df = pd.read_csv(TRAIN_PATH, names=["class", "title", "content"])
-        df_snli=pd.read_csv("/content/gdrive/My_drive/snli_1.0_train.txt",names=["sentence1","sentence2","gold_label"])
+        df_snli=pd.read_csv("/content/gdrive/My drive/snli_1.0_train.txt",names=["sentence1","sentence2","gold_label"])
         df_sts=pd.read_csv("/content/gdrive/My drive/sts.csv",sep='\t',usecols=["Score","Sent1","Sent2"])
         df_cola = pd.read_csv("/content/gdrive/My drive/cola_public/raw/in_domain_train.csv")
        
     else:
         df=pd.read_csv(TEST_PATH, names=["class", "title", "content"])
-        df_snli=pd.read_csv("snli_1.0/snli_1.0_test.csv",names=["sentence1","sentence2","gold_label"])
-        df_sts=pd.read_csv("sts-test.csv",usecols=["score","sent1","sent2"])
+        df_snli=pd.read_csv("/content/gdrive/My drive/snli_1.0_test.txt",names=["sentence1","sentence2","gold_label"])
+        df_sts=pd.read_csv("/content/gdrive/My drive/sts.csv",usecols=["Score","Sent1","Sent2"])
         df_cola = pd.read_csv("/content/gdrive/My drive/cola_public/raw/in_domain_train.csv")
         
-    df_sts['score'].replace('', np.nan, inplace=True)
-    df_sts=df_sts.dropna(subset=['score'], inplace=True)    
+    df_sts['Score'].replace('', np.nan, inplace=True)
+    df_sts=df_sts.dropna(subset=['Score'], inplace=True)    
     # Shuffle dataframe
     df = df.sample(frac=1)
     df_snli = df_snli.sample(frac=1)
