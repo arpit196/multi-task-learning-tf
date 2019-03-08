@@ -21,7 +21,8 @@ def train(train_x, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_
         # Summary
         lm_loss_summary = tf.summary.scalar("lm_loss", model.lm_loss)
         clf_loss_summary = tf.summary.scalar("clf_loss", model.clf_loss)
-        clf_nliloss_summary = tf.summary.scalar("clf_nliloss", model.clf_nliloss)
+        clf_nliloss_summary = tf.summary.scalar("clf_nliloss", model.clf_loss_nli)
+        clf_stsloss_summary = tf.summary.scalar("clf_stsloss", model.clf_loss_sts)
         total_loss_summary = tf.summary.scalar("total_loss", model.total_loss)
         summary_op = tf.summary.merge_all()
         summary_writer = tf.summary.FileWriter("summary", sess.graph)
@@ -43,7 +44,7 @@ def train(train_x, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_
             losses, accuracies, iters = 0, 0, 0
 
             for batch_x, batch_lm_y, batch_clf_y in test_batches:
-                feed_dict = {model.x: batch_x, model.lm_y: batch_lm_y, model.clf_y: batch_clf_y, model.keep_prob: 1.0{model.x: batch_x, model.xnli11: batch_xnli1, model.xnli2:batch_xnli2, model.clf_nli:batch_clf_nli, model.clf_sts:batch_clf_sts, model.lm_y: batch_lm_y, model.clf_y: batch_clf_y, model.keep_prob: args.keep_prob}
+                feed_dict = {model.x: batch_x, model.xnli11: batch_xnli1, model.xnli2:batch_xnli2, model.clf_nli:batch_clf_nli, model.clf_sts:batch_clf_sts, model.lm_y: batch_lm_y, model.clf_y: batch_clf_y, model.keep_prob: args.keep_prob}
                 lm_loss, accuracy = sess.run([model.lm_loss, model.accuracy], feed_dict=feed_dict)
                 losses += lm_loss
                 accuracies += accuracy
