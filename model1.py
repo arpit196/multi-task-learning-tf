@@ -8,7 +8,7 @@ def stacked_multihead_attention_d(x,y, num_blocks, num_heads, use_residual, is_t
             with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
                 x, attentions = multihead_attentiond(x, y, y, use_residual, is_training, num_heads=num_heads, reuse=reuse)
                 x = feed_forward(x, num_hiddens=num_hiddens, activation=tf.nn.relu, reuse=reuse)
-return x, attentions
+    return x, attentions
 
 
 def multihead_attentiond(queries, keys, values, use_residual, is_training, num_units=None, num_heads=8, reuse=False):
@@ -32,8 +32,7 @@ def multihead_attentiond(queries, keys, values, use_residual, is_training, num_u
         if use_residual:
             output = residual(output, queries, reuse=reuse)
         # output = normalization(output)
-        
-return output, attentions
+        return output, attentions
 
 def stacked_multihead_attention_d2(x,y, num_blocks, num_heads, use_residual, is_training, reuse=False):
     num_hiddens = x.get_shape().as_list()[-1]
@@ -42,7 +41,7 @@ def stacked_multihead_attention_d2(x,y, num_blocks, num_heads, use_residual, is_
             with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
                 x, attentions = multihead_attention(x, y, y, use_residual, is_training, num_heads=num_heads, reuse=reuse)
                 x = feed_forward(x, num_hiddens=num_hiddens, activation=tf.nn.relu, reuse=reuse)
-return x, attentions
+        return x, attentions
 
 def stacked_multihead_attention(x, num_blocks, num_heads, use_residual, is_training, reuse=False):
     num_hiddens = x.get_shape().as_list()[-1]
@@ -51,7 +50,7 @@ def stacked_multihead_attention(x, num_blocks, num_heads, use_residual, is_train
             with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
                 x, attentions = multihead_attention(x, x, x, use_residual, is_training, num_heads=num_heads, reuse=reuse)
                 x = feed_forward(x, num_hiddens=num_hiddens, activation=tf.nn.relu, reuse=reuse)
-return x, attentions
+    return x, attentions
 
 def multihead_attention(queries, keys, values, use_residual, is_training, num_units=None, num_heads=8, reuse=False):
     with tf.variable_scope('multihead-attention', reuse=reuse):
@@ -75,7 +74,7 @@ def multihead_attention(queries, keys, values, use_residual, is_training, num_un
             output = residual(output, queries, reuse=reuse)
         # output = normalization(output)
         
-return output, attentions
+    return output, attentions
 
 def stacked_multihead_attention2(x, num_blocks, num_heads, use_residual, is_training, reuse=False):
     num_hiddens = x.get_shape().as_list()[-1]
@@ -84,7 +83,7 @@ def stacked_multihead_attention2(x, num_blocks, num_heads, use_residual, is_trai
             with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
                 x, attentions = multihead_attention2(x, x, x, use_residual, is_training, num_heads=num_heads, reuse=reuse)
                 x = feed_forward(x, num_hiddens=num_hiddens, activation=tf.nn.relu, reuse=reuse)
-return x, attentions
+    return x, attentions
 
 def multihead_attention2(queries, keys, values, use_residual, is_training, num_units=None, num_heads=8, reuse=False):
     with tf.variable_scope('multihead-attention2', reuse=reuse):
@@ -108,7 +107,7 @@ def multihead_attention2(queries, keys, values, use_residual, is_training, num_u
             output = residual(output, queries, reuse=reuse)
         # output = normalization(output)
         
-return output, attentions
+    return output, attentions
 
 def stacked_multihead_attention3(x, num_blocks, num_heads, use_residual, is_training, reuse=False):
     num_hiddens = x.get_shape().as_list()[-1]
@@ -117,7 +116,7 @@ def stacked_multihead_attention3(x, num_blocks, num_heads, use_residual, is_trai
             with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
                 x, attentions = multihead_attention3(x, x, x, use_residual, is_training, num_heads=num_heads, reuse=reuse)
                 x = feed_forward(x, num_hiddens=num_hiddens, activation=tf.nn.relu, reuse=reuse)
-return x, attentions
+    return x, attentions
 
 def multihead_attention3(queries, keys, values, use_residual, is_training, num_units=None, num_heads=8, reuse=False):
     with tf.variable_scope('multihead-attention3', reuse=reuse):
@@ -141,7 +140,7 @@ def multihead_attention3(queries, keys, values, use_residual, is_training, num_u
             output = residual(output, queries, reuse=reuse)
         # output = normalization(output)
         
-return output, attentions
+    return output, attentions
 
 def scaled_dot_product_attention(queries, keys, values, model_size=None, reuse=False):
     if model_size is None:
@@ -152,7 +151,7 @@ def scaled_dot_product_attention(queries, keys, values, model_size=None, reuse=F
         Q_K = tf.matmul(queries, keys_T) / tf.sqrt(model_size)
         attentions = tf.nn.softmax(Q_K)
         scaled_dprod_att = tf.matmul(attentions, values)
-return scaled_dprod_att, attentions
+    return scaled_dprod_att, attentions
 
 class Model(object):
     def __init__(self, vocabulary_size, num_class, args):
