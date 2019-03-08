@@ -71,9 +71,9 @@ def build_word_dict():
 def build_dataset(step, word_dict, max_document_len):
     if step == "train":
         df = pd.read_csv(TRAIN_PATH, names=["class", "title", "content"])
-        df_snli=pd.read_csv("/content/gdrive/My_drive/snli_1.0/snli_1.0_train.csv",names=["sentence1","sentence2","gold_label"])
-        df_sts=pd.read_csv("/content/gdrive/My_drive/sts.csv",usecols=["score","sent1","sent2"])
-        df_cola = pd.read_csv("/content/gdrive/My_drive/cola_public/raw/in_domain_train.csv")
+        df_snli=pd.read_csv("content/gdrive/My_drive/snli_1.0/snli_1.0_train.csv",names=["sentence1","sentence2","gold_label"])
+        df_sts=pd.read_csv("content/gdrive/My_drive/sts.csv",usecols=["score","sent1","sent2"])
+        df_cola = pd.read_csv("content/gdrive/My_drive/cola_public/raw/in_domain_train.csv")
        
     else:
         df=pd.read_csv(TEST_PATH, names=["class", "title", "content"])
