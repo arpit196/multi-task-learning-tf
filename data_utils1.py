@@ -41,7 +41,7 @@ def build_word_dict():
         contents = train_df["content"]
         contents.append(train_df_snli["sentence1"])
         contents.append(train_df_sts["Sent1"])
-        contents.append(train_df_snli["Sent2"])
+        contents.append(train_df_snli["sentence2"])
         contents.append(train_df_sts["Sent2"])
         contents.append(train_df_cola.iloc[:,])
        
