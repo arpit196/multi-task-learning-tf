@@ -141,10 +141,10 @@ def build_dataset(step, word_dict, max_document_len):
 
     clf_y = list(map(lambda d: d - 1, list(df["class"])))
 
-    return x, xnli1, xnli2, xsts1, xsts2, xcola, lm_y, clf_y, clf_sts, clf_nli
+    return x, xnli1, xnli2, xsts1, xsts2, lm_y, clf_y, clf_sts, clf_nli
 
 
-def batch_iter(inputs, inp_nli1, inp_nli2, inp_sts1, inp_sts2, inp_ lm_outputs, clf_outputs, batch_size, num_epochs):
+def batch_iter(inputs, inp_nli1, inp_nli2, inp_sts1, inp_sts2, lm_outputs, clf_outputs, clf_sts, clf_nli, batch_size, num_epochs):
     inputs = np.array(inputs)
     inp_nli1 = np.array(inp_nli1)
     inp_nli1 = np.array(inp_nli2)
@@ -153,10 +153,12 @@ def batch_iter(inputs, inp_nli1, inp_nli2, inp_sts1, inp_sts2, inp_ lm_outputs, 
     inp_cola = np.array(inp_cola)
     lm_outputs = np.array(lm_outputs)
     clf_outputs = np.array(clf_outputs)
-
+    
     num_batches_per_epoch = (len(inputs) - 1) // batch_size + 1
+    
     for epoch in range(num_epochs):
         for batch_num in range(num_batches_per_epoch):
             start_index = batch_num * batch_size
             end_index = min((batch_num + 1) * batch_size, len(inputs))
-            yield inputs[start_index:end_index], lm_outputs[start_index:end_index], clf_outputs[start_index:end_index]
+            yield inputs[start_index:end_index], inp_nli1[start_index:end_index],inp_nli2[start_index:end_index], inp_sts1[start_index:end_index],inp_sts2[start_index:end_index], lm_outputs[start_index:end_index], clf_outputs[start_index:end_index], clf_sts[start_index:end_index], clf_nli[start_index:end_index]
+            
