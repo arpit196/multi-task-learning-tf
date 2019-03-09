@@ -39,7 +39,7 @@ def train(train_x, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_
             if step % 100 == 0:
                 print("step {0}: loss={1} (lm_loss={2}, clf_loss={3})".format(step, total_loss, lm_loss, clf_loss))
 
-        def eval(test_x test_xnli1, test_xnli2, test_xsts1, test_xsts2, test_lm_y, test_clf_nli, test_clf_sts, test_clf_y):
+        def eval(test_x,test_xnli1, test_xnli2, test_xsts1, test_xsts2, test_lm_y, test_clf_nli, test_clf_sts, test_clf_y):
             test_batches = batch_iter(test_x, test_lm_y, test_clf_y, args.batch_size, 1)
             losses, accuracies, iters = 0, 0, 0
 
