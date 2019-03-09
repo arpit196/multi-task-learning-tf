@@ -78,13 +78,13 @@ def build_dataset(step, word_dict, max_document_len):
         #print(df_snli)
         df_snli=pd.read_csv("/content/gdrive/My Drive/snli_1.0_train.txt",'\t',usecols=["sentence1","sentence2","gold_label"])
         df_sts=pd.read_csv("/content/gdrive/My Drive/sts.csv",sep='\t',usecols=["Score","Sent1","Sent2"])
-        df_cola = pd.read_csv("/content/gdrive/My Drive/cola_public/raw/in_domain_train.csv")
+        df_cola = pd.read_csv("/content/gdrive/My Drive/cola_public/raw/in_domain_train.tsv",sep='\t')
        
     else:
         df=pd.read_csv(TEST_PATH, names=["class", "title", "content"])
-        df_snli=pd.read_csv("/content/gdrive/My Drive/snli_1.0_test.txt",names=["sentence1","sentence2","gold_label"])
+        df_snli=pd.read_csv("/content/gdrive/My Drive/snli_1.0_test.txt",sep='\t',usecols=["sentence1","sentence2","gold_label"])
         df_sts=pd.read_csv("/content/gdrive/My Drive/sts.csv",usecols=["Score","Sent1","Sent2"])
-        df_cola = pd.read_csv("/content/gdrive/My Drive/cola_public/raw/in_domain_train.csv")
+        df_cola = pd.read_csv("/content/gdrive/My Drive/cola_public/raw/in_domain_train.tsv",sep='\t')
         
     df_sts['Score'].replace('', np.nan, inplace=True)
     df_sts=df_sts.dropna(subset=['Score'], inplace=True)    
