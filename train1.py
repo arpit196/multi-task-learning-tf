@@ -39,7 +39,7 @@ def train(train_x, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_
             if step % 100 == 0:
                 print("step {0}: loss={1} (lm_loss={2}, clf_loss={3})".format(step, total_loss, lm_loss, clf_loss))
 
-        def eval(test_x, test_lm_y, test_clf_y):
+        def eval(test_x test_xnli1, test_xnli2, test_xsts1, test_xsts2, test_lm_y, test_clf_nli, test_clf_sts, test_clf_y):
             test_batches = batch_iter(test_x, test_lm_y, test_clf_y, args.batch_size, 1)
             losses, accuracies, iters = 0, 0, 0
 
@@ -53,9 +53,9 @@ def train(train_x, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_
             print("\ntest perplexity = {0}".format(np.exp(losses / iters)))
             print("test accuracy = {0}\n".format(accuracies / iters))
 
-        batches = batch_iter(train_x, train_lm_y, train_clf_y, args.batch_size, args.num_epochs)
-        for batch_x, batch_lm_y, batch_clf_y in batches:
-            train_step(batch_x, batch_lm_y, batch_clf_y)
+        batches = batch_iter(train_x, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_y, train_clf_y, train_clf_sts, train_clf_nli, args.batch_size, args.num_epochs)
+        for (batch_x, batch_xnli1, batch_xnli2, batch_xsts1, batch_xsts2, batch_lm_y, batch_clf_y, batch_clf_sts, batch_clf_nli in batches:
+            train_step(batch_x, batch_xnli1, batch_xnli2, batch_xsts1, batch_xsts2, batch_lm_y, batch_clf_y, batch_clf_sts, batch_clf_nli)
             step = tf.train.global_step(sess, global_step)
 
             if step % 1000 == 0:
