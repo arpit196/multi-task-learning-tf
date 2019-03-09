@@ -144,8 +144,13 @@ def build_dataset(step, word_dict, max_document_len):
     return x, xnli1, xnli2, xsts1, xsts2, xcola, lm_y, clf_y, clf_sts, clf_nli
 
 
-def batch_iter(inputs, lm_outputs, clf_outputs, batch_size, num_epochs):
+def batch_iter(inputs, inp_nli1, inp_nli2, inp_sts1, inp_sts2, inp_ lm_outputs, clf_outputs, batch_size, num_epochs):
     inputs = np.array(inputs)
+    inp_nli1 = np.array(inp_nli1)
+    inp_nli1 = np.array(inp_nli2)
+    inp_sts1 = np.array(inp_sts1)
+    inp_sts2 = np.array(inp_sts2)
+    inp_cola = np.array(inp_cola)
     lm_outputs = np.array(lm_outputs)
     clf_outputs = np.array(clf_outputs)
 
