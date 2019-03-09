@@ -74,6 +74,7 @@ def build_dataset(step, word_dict, max_document_len):
     if step == "train":
         df = pd.read_csv(TRAIN_PATH, names=["class", "title", "content"])
         print("HI")
+        df_snli=pd.read_csv("/content/gdrive/My Drive/snli_1.0_train.txt")
         print(df_snli.head())
         df_snli=pd.read_csv("/content/gdrive/My Drive/snli_1.0_train.txt",usecols=["sentence1","sentence2","gold_label"])
         df_sts=pd.read_csv("/content/gdrive/My Drive/sts.csv",sep='\t',usecols=["Score","Sent1","Sent2"])
