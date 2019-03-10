@@ -125,7 +125,7 @@ def build_dataset(step, word_dict, max_document_len):
     xsts2 = list(map(lambda d: d[:max_document_len], x))
     xsts2 = list(map(lambda d: d + (max_document_len - len(d)) * [word_dict["<pad>"]], x))
     
-    xcola = list(map(lambda d: word_tokenize(clean_str(d)), str(df_cola.iloc[:,4])))
+    xcola = list(map(lambda d: word_tokenize(clean_str(d)), str(df_cola.iloc[:,3])))
     xcola = list(map(lambda d: ["<s>"] + d, data))
     xcola = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), x))
     xcola = list(map(lambda d: d[:max_document_len], x))
