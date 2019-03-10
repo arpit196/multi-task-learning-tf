@@ -112,13 +112,13 @@ def build_dataset(step, word_dict, max_document_len):
     xnli2 = list(map(lambda d: d[:max_document_len], x))
     xnli2 = list(map(lambda d: d + (max_document_len - len(d)) * [word_dict["<pad>"]], x))
     
-    xsts1 = list(map(lambda d: word_tokenize(clean_str(d)), str(df_sts["sent1"])))
+    xsts1 = list(map(lambda d: word_tokenize(clean_str(d)), str(df_sts["Sent1"])))
     xsts1 = list(map(lambda d: ["<s>"] + d, data))
     xsts1 = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), x))
     xsts1 = list(map(lambda d: d[:max_document_len], x))
     xsts1 = list(map(lambda d: d + (max_document_len - len(d)) * [word_dict["<pad>"]], x))
     
-    xsts2 = list(map(lambda d: word_tokenize(clean_str(d)), str(df_sts["sent2"])))
+    xsts2 = list(map(lambda d: word_tokenize(clean_str(d)), str(df_sts["Sent2"])))
     xsts2 = list(map(lambda d: ["<s>"] + d, data))
     xsts2 = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), x))
     xsts2 = list(map(lambda d: d[:max_document_len], x))
