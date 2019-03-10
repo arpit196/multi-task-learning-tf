@@ -87,7 +87,7 @@ def build_dataset(step, word_dict, max_document_len):
         df_cola = pd.read_csv("/content/gdrive/My Drive/cola_public/raw/in_domain_train.tsv",sep='\t')
         
     df_sts['Score'].replace('', np.nan, inplace=True)
-    df_sts=df_sts.dropna(subset=['Score'], inplace=True)    
+    df_sts.dropna(subset=['Score'], inplace=True)    
     # Shuffle dataframe
     df = df.sample(frac=1)
     df_snli = df_snli.sample(frac=1)
