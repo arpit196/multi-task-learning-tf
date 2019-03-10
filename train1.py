@@ -3,7 +3,9 @@ import os
 import tensorflow as tf
 import numpy as np
 from model1 import Model
-from data_utils1 import download_dbpedia, build_word_dict, build_dataset, batch_iter
+from data_utils1 import download_dbpedia, build_word_dict, build_dataset, batch_ite
+
+from layers.basics import linear, dropout, feed_forward, residual
 
 
 def train(train_x, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_y, train_clf_y, train_clf_sts, train_clf_nli, test_x, test_xnli1, test_xnli2, test_xsts1, test_xsts2, test_lm_y, test_clf_y, test_clf_nli, test_clf_sts, word_dict, args):
