@@ -136,7 +136,7 @@ def build_dataset(step, word_dict, max_document_len):
     lm_y = list(map(lambda d: d[:max_document_len], lm_y))
     lm_y = list(map(lambda d: d + (max_document_len - len(d)) * [word_dict["<pad>"]], lm_y))
     
-    clf_nli = list(map(lambda d: d , list(pd.Categorical(df_nli["gold_label"]).cat.codes)))
+    clf_nli = list(map(lambda d: d , list(pd.Categorical(df_snli["gold_label"]).cat.codes)))
     
     clf_sts = list(map(lambda d: d, list(df_sts["score"])))
     
