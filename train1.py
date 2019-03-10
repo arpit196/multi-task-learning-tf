@@ -3,7 +3,7 @@ import os
 import tensorflow as tf
 import numpy as np
 from model1 import Model
-from data_utils1 import download_dbpedia, build_word_dict, build_dataset, batch_ite
+from data_utils1 import download_dbpedia, build_word_dict, build_dataset, batch_iter
 
 from layers.basics import linear, dropout, feed_forward, residual
 
