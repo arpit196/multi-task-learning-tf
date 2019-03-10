@@ -268,5 +268,5 @@ class Model(object):
 
     def make_cell(self):
         cell = rnn.BasicLSTMCell(self.num_hidden)
-        cell = rnn.DropoutWrapper(cell, output_keep_prob=self.keep_prob)
+        cell = rnn.DropoutWrapper(cell, output_keep_prob=0.5)
         return cell
