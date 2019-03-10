@@ -214,32 +214,32 @@ class Model(object):
                 cell, self.x_trans, sequence_length=self.x_len, dtype=tf.float32)
             
         with tf.name_scope("base_transformer"):
-            self.base_cola=stacked_multihead_attention(self.xcola_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.base_nli1=stacked_multihead_attention(self.xnli1_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.base_nli2=stacked_multihead_attention(self.xnli2_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.base_sts1=stacked_multihead_attention(self.sts1_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.base_sts2=stacked_multihead_attention(self.sts2_emb,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.base_cola=stacked_multihead_attention(self.xcola_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training)
+            self.base_nli1=stacked_multihead_attention(self.xnli1_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training)
+            self.base_nli2=stacked_multihead_attention(self.xnli2_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training)
+            self.base_sts1=stacked_multihead_attention(self.sts1_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training)
+            self.base_sts2=stacked_multihead_attention(self.sts2_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training)
             
         with tf.name_scope("lm"):
             self.lm_logits = tf.layers.dense(rnn_outputs, vocabulary_size)
             
         with tf.name_scope("cola"):
-            self.trasnform_output=stacked_multihead_attention2(self.base_cola,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.trasnform_output=stacked_multihead_attention2(self.base_cola,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
             self.lm_logitscola = tf.layers.dense(self.transform_output, vocabulary_size)
 
         with tf.name_scope("nli"):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
-            self.transform_output21=stacked_multihead_attention2(self.base_nli1,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.transform_output22=stacked_multihead_attention2(self.base_nli2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.transform_output23=stacked_multihead_attention_d(self.base_nli1,self.base_nli2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.transform_output21=stacked_multihead_attention2(self.base_nli1,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
+            self.transform_output22=stacked_multihead_attention2(self.base_nli2,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
+            self.transform_output23=stacked_multihead_attention_d(self.base_nli1,self.base_nli2,num_blocks=1,num_heads=3,use_residual=False,is_training=self.is_training)
             self.clf_logitsnli = tf.layers.dense(self.transform_output23, num_class)
             
         with tf.name_scope("sts"):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
-            self.transform_output31=stacked_multihead_attention3(self.base_sts1,num_blocks=3,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.transform_output31=stacked_multihead_attention3(self.base_sts1,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
             #self.clf_logits = tf.layers.dense(self.transform_output2, num_class)
-            self.transform_output32=stacked_multihead_attention3(self.base_sts2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
-            self.transform_output33=stacked_multihead_attention_d2(self.base_sts1,self.base_sts2,num_blocks=2,num_heads=4,use_residual=False,is_training=self.is_training)
+            self.transform_output32=stacked_multihead_attention3(self.base_sts2,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
+            self.transform_output33=stacked_multihead_attention_d2(self.base_sts1,self.base_sts2,num_blocks=1,num_heads=3,use_residual=False,is_training=self.is_training)
             self.clf_logitssts = tf.layers.dense(self.transform_output33, num_class)
             
         with tf.name_scope("loss"):
