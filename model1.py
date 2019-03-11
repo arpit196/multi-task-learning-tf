@@ -208,10 +208,10 @@ class Model(object):
             self.sts2_emb = tf.nn.embedding_lookup(embeddings, self.xsts2)
            
         with tf.name_scope("rnn"):
-            self.x_trans=stacked_multihead_attention(self.x_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training)
+            #self.x_trans=stacked_multihead_attention(self.x_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training)
             cell = rnn.MultiRNNCell([self.make_cell() for _ in range(self.num_layers)])
             rnn_outputs, _ = tf.nn.dynamic_rnn(
-                cell, self.x_trans, sequence_length=self.x_len, dtype=tf.float32)
+                cell, self.x_emb, sequence_length=self.x_len, dtype=tf.float32)
             
         with tf.name_scope("base_transformer"):
             self.base_cola=stacked_multihead_attention(self.xcola_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training)
