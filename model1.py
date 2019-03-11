@@ -62,9 +62,32 @@ def stacked_multihead_attention_d2(x,y, num_blocks, num_heads, use_residual, is_
     with tf.variable_scope('stacked_multihead_attention', reuse=reuse):
         for i in range(num_blocks):
             with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
-                x, attentions = multihead_attention(x, y, y, use_residual, is_training, num_heads=num_heads, reuse=reuse)
+                x, attentions = multihead_attentiond2(x, y, y, use_residual, is_training, num_heads=num_heads, reuse=reuse)
                 x = feed_forward(x, num_hiddens=num_hiddens, activation=tf.nn.relu, reuse=reuse)
         return x, attentions
+    
+def multihead_attentiond2(queries, keys, values, use_residual, is_training, num_units=None, num_heads=8, reuse=False):
+    with tf.variable_scope('multihead-attentiond2', reuse=reuse):
+        if num_units is None:
+            num_units = queries.get_shape().as_list()[-1]
+        Q = linear(queries)
+        K = linear(keys)
+        V = linear(values)
+
+        Q = tf.concat(tf.split(Q, num_heads, axis=2), axis=0)
+        K = tf.concat(tf.split(K, num_heads, axis=2), axis=0)
+        V = tf.concat(tf.split(V, num_heads, axis=2), axis=0)
+
+        Q_K_V, attentions = scaled_dot_product_attention(Q, K, V)
+        Q_K_V = dropout(Q_K_V, is_training)
+        Q_K_V_ = tf.concat(tf.split(Q_K_V, num_heads, axis=0), axis=2)
+
+        output = feed_forward(Q_K_V_, num_units, reuse=reuse)
+
+        if use_residual:
+            output = residual(output, queries, reuse=reuse)
+        # output = normalization(output)
+        return output, attentions
 
 def stacked_multihead_attention(x, num_blocks, num_heads, use_residual, is_training, reuse=False):
     num_hiddens = x.get_shape().as_list()[-1]
