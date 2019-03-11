@@ -1,5 +1,6 @@
 import tensorflow as tf
 from tensorflow.contrib import rnn
+import numpy
 
 def feed_forward(x, num_hiddens, activation=None, reuse=False):
     with tf.variable_scope('feed-forward2', reuse=reuse):
