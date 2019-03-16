@@ -59,7 +59,7 @@ def multihead_attentiond(queries, keys, values, use_residual, is_training, num_u
         return output, attentions
 
 def stacked_multihead_attention_d2(x,y, num_blocks, num_heads, use_residual, is_training, reuse=False):
-    num_hiddens = x[0].get_shape().as_list()[-1]
+    num_hiddens = x.get_shape().as_list()[-1]
     with tf.variable_scope('stacked_multihead_attention', reuse=reuse):
         for i in range(num_blocks):
             with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
@@ -239,11 +239,11 @@ class Model(object):
                 cell, self.x_emb, sequence_length=self.x_len, dtype=tf.float32)
             
         with tf.name_scope("base_transformer"):
-            self.base_cola=stacked_multihead_attention(self.xcola_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training)
-            self.base_nli1=stacked_multihead_attention(self.xnli1_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training,reuse=True)
-            self.base_nli2=stacked_multihead_attention(self.xnli2_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training,reuse=True)
-            self.base_sts1=stacked_multihead_attention(self.sts1_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training,reuse=True)
-            self.base_sts2=stacked_multihead_attention(self.sts2_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training,reuse=True)
+            self.base_cola,_=stacked_multihead_attention(self.xcola_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training)
+            self.base_nli1,_=stacked_multihead_attention(self.xnli1_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training,reuse=True)
+            self.base_nli2,_=stacked_multihead_attention(self.xnli2_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training,reuse=True)
+            self.base_sts1,_=stacked_multihead_attention(self.sts1_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training,reuse=True)
+            self.base_sts2,_=stacked_multihead_attention(self.sts2_emb,num_blocks=3,num_heads=5,use_residual=False,is_training=self.is_training,reuse=True)
             
         with tf.name_scope("lm"):
             self.lm_logits = tf.layers.dense(rnn_outputs, vocabulary_size)
