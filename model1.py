@@ -249,7 +249,7 @@ class Model(object):
             self.lm_logits = tf.layers.dense(rnn_outputs, vocabulary_size)
             
         with tf.name_scope("cola"):
-            self.trasnform_output=stacked_multihead_attention2(self.base_cola,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
+            self.transform_output=stacked_multihead_attention2(self.base_cola,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
             self.lm_logitscola = tf.layers.dense(self.transform_output, vocabulary_size)
 
         with tf.name_scope("nli"):
