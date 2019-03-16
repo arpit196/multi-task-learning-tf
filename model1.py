@@ -59,7 +59,7 @@ def multihead_attentiond(queries, keys, values, use_residual, is_training, num_u
         return output, attentions
 
 def stacked_multihead_attention_d2(x,y, num_blocks, num_heads, use_residual, is_training, reuse=False):
-    num_hiddens = x.get_shape().as_list()[-1]
+    num_hiddens = x[0].get_shape().as_list()[-1]
     with tf.variable_scope('stacked_multihead_attention', reuse=reuse):
         for i in range(num_blocks):
             with tf.variable_scope('multihead_block_{}'.format(i), reuse=reuse):
@@ -91,7 +91,6 @@ def multihead_attentiond2(queries, keys, values, use_residual, is_training, num_
         return output, attentions
 
 def stacked_multihead_attention(x, num_blocks, num_heads, use_residual, is_training, reuse=False):
-    print(numpy.array(x))
     num_hiddens = x.get_shape().as_list()[-1]
     with tf.variable_scope('stacked_multihead_attention', reuse=reuse):
         for i in range(num_blocks):
@@ -125,6 +124,7 @@ def multihead_attention(queries, keys, values, use_residual, is_training, num_un
     return output, attentions
 
 def stacked_multihead_attention2(x, num_blocks, num_heads, use_residual, is_training, reuse=False):
+    print(x)
     num_hiddens = x.get_shape().as_list()[-1]
     with tf.variable_scope('stacked_multihead_attention2', reuse=reuse):
         for i in range(num_blocks):
