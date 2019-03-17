@@ -140,7 +140,7 @@ def build_dataset(step, word_dict, max_document_len):
     
     clf_sts = list(map(lambda d: d-1, list(df_sts["Score"])))
     
-    clf_cola = list(map(lambda d: d, list(df_cola.iloc[:,1])))
+    clf_cola = list(map(lambda d: d+1, list(df_cola.iloc[:,1])))
 
     clf_y = list(map(lambda d: d - 1, list(df["class"])))
 
