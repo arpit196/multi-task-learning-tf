@@ -20,7 +20,7 @@ def train(train_x, train_cola, train_xnli1, train_xnli2, train_xsts1, train_xsts
 
         # Summary
         lm_loss_summary = tf.summary.scalar("lm_loss", model.lm_loss)
-        clf_loss_summary = tf.summary.scalar("clf_loss", model.clf_loss)
+        clf_colaloss_summary = tf.summary.scalar("clf_loss", model.clf_loss_cola)
         clf_nliloss_summary = tf.summary.scalar("clf_nliloss", model.clf_loss_nli)
         clf_stsloss_summary = tf.summary.scalar("clf_stsloss", model.clf_loss_sts)
         total_loss_summary = tf.summary.scalar("total_loss", model.total_loss)
