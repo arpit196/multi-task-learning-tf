@@ -30,7 +30,7 @@ def train(train_x, train_cola, train_xnli1, train_xnli2, train_xsts1, train_xsts
         # Initialize all variables
         sess.run(tf.global_variables_initializer())
 
-        def train_step(batch_x, batch_xnli1, batch_xnli2, batch_xsts1, batch_xsts2, batch_lm_y, batch_clf_y, batch_clf_sts, batch_clf_nli):
+        def train_step(batch_x, batch_cola, batch_xnli1, batch_xnli2, batch_xsts1, batch_xsts2, batch_lm_y, batch_clf_y, batch_clf_sts, batch_clf_nli, batch_clf_cola):
             feed_dict = {model.x: batch_x, model.xcola: batch_cola, model.xnli1: batch_xnli1, model.xnli2:batch_xnli2, model.clf_nli:batch_clf_nli, model.clf_sts:batch_clf_sts, model.lm_y: batch_lm_y, model.clf_y: batch_clf_y,model.clf_cola:batch_clf_cola, model.keep_prob: args.keep_prob}
             _, step, summaries, total_loss, lm_loss, clf_loss,clf_loss_sts, clf_loss_nli = \
                 sess.run([train_op, global_step, summary_op, model.total_loss, model.lm_loss, model.clf_loss,model.clf_loss_sts,model.clf_loss_nli, model.clf_loss_cola], feed_dict=feed_dict)
@@ -53,9 +53,9 @@ def train(train_x, train_cola, train_xnli1, train_xnli2, train_xsts1, train_xsts
             print("\ntest perplexity = {0}".format(np.exp(losses / iters)))
             print("test accuracy = {0}\n".format(accuracies / iters))
 
-        batches = batch_iter(train_x, train_xcola, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_y, train_clf_y, train_clf_sts, train_clf_nli, args.batch_size, args.num_epochs)
-        for batch_x, batch_xnli1, batch_xnli2, batch_xsts1, batch_xsts2, batch_lm_y, batch_clf_y, batch_clf_sts, batch_clf_nli in batches:
-            train_step(batch_x, batch_xnli1, batch_xnli2, batch_xsts1, batch_xsts2, batch_lm_y, batch_clf_y, batch_clf_sts, batch_clf_nli)
+        batches = batch_iter(train_x, train_cola, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_y, train_clf_y, train_clf_sts, train_clf_nli, train_clf_cola, args.batch_size, args.num_epochs)
+        for batch_x, batch_cola, batch_xnli1, batch_xnli2, batch_xsts1, batch_xsts2, batch_lm_y, batch_clf_y, batch_clf_sts, batch_clf_nli in batches:
+            train_step(batch_x, batch_cola, batch_xnli1, batch_xnli2, batch_xsts1, batch_xsts2, batch_lm_y, batch_clf_y, batch_clf_sts, batch_clf_nli,batch_clf_cola)
             step = tf.train.global_step(sess, global_step)
 
             if step % 1000 == 0:
