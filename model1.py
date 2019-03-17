@@ -314,6 +314,11 @@ class Model(object):
             self.meannli=tf.reduce_sum(self.transform_output23, axis=1)
             self.clf_logitsnli = tf.layers.dense(self.meannli, 3)
             
+        with tf.name_scope("clf-output"):
+            rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
+            self.clf_logits = tf.layers.dense(rnn_outputs_flat, num_class)
+            self.clf_predictions = tf.argmax(self.clf_logits, -1, output_type=tf.int32)
+            
         with tf.name_scope("sts"):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
             self.transform_output31,_=stacked_multihead_attention3(self.base_sts1,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
