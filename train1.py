@@ -33,11 +33,11 @@ def train(train_x, train_cola, train_xnli1, train_xnli2, train_xsts1, train_xsts
         def train_step(batch_x, batch_cola, batch_xnli1, batch_xnli2, batch_xsts1, batch_xsts2, batch_lm_y, batch_clf_y, batch_clf_sts, batch_clf_nli, batch_clf_cola):
             feed_dict = {model.x: batch_x, model.xcola: batch_cola, model.xnli1: batch_xnli1, model.xnli2:batch_xnli2, model.clf_nli:batch_clf_nli, model.clf_sts:batch_clf_sts, model.lm_y: batch_lm_y, model.clf_y: batch_clf_y,model.clf_cola:batch_clf_cola, model.keep_prob: args.keep_prob}
             _, step, summaries, total_loss, lm_loss, clf_loss,clf_loss_sts, clf_loss_nli = \
-                sess.run([train_op, global_step, summary_op, model.total_loss, model.lm_loss, model.clf_loss,model.clf_loss_sts,model.clf_loss_nli, model.clf_loss_cola], feed_dict=feed_dict)
+                sess.run([train_op, global_step, summary_op, model.total_loss, model.lm_loss ,model.clf_loss_sts,model.clf_loss_nli, model.clf_loss_cola], feed_dict=feed_dict)
             summary_writer.add_summary(summaries, step)
 
             if step % 100 == 0:
-                print("step {0}: loss={1} (lm_loss={2}, clf_loss={3})".format(step, total_loss, lm_loss, clf_loss))
+                print("step {0}: loss={1} (lm_loss={2}, clf_loss={3})".format(step, total_loss, lm_loss))
 
         def eval(test_x,test_xnli1, test_xnli2, test_xsts1, test_xsts2, test_lm_y, test_clf_nli, test_clf_sts, test_clf_y):
             test_batches = batch_iter(test_x, test_lm_y, test_clf_y, args.batch_size, 1)
