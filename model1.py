@@ -38,7 +38,7 @@ def stacked_multihead_attention_d(x,y, num_blocks, num_heads, use_residual, is_t
 def multihead_attentiond(queries, keys, values, use_residual, is_training, num_units=None, num_heads=8, reuse=False):
     with tf.variable_scope('multihead-attentiond', reuse=reuse):
         if num_units is None:
-            num_units = queries.get_shape[-1]
+            num_units = queries.get_shape().as_list()[-1]
         Q = linear(queries)
         K = linear(keys)
         V = linear(values)
