@@ -270,6 +270,7 @@ class Model(object):
         self.clf_y = tf.placeholder(tf.int32, [None])
         self.clf_nli = tf.placeholder(tf.int32, [None])
         self.clf_sts = tf.placeholder(tf.int32, [None])
+        self.clf_cola = tf.placeholder(tf.int32, [None])
         #self.keep_prob = tf.placeholder(tf.float32, [])
 
         self.x_len = tf.reduce_sum(tf.sign(self.x), 1)
