@@ -6,7 +6,7 @@ from model1 import Model
 from data_utils1 import download_dbpedia, build_word_dict, build_dataset, batch_iter
 
 
-def train(train_x, train_cola, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_y, train_clf_y, train_clf_sts, train_clf_nli,train_clf_cola, test_x, test_xnli1, test_xnli2, test_xsts1, test_xsts2, test_lm_y, test_clf_y, test_clf_nli, test_clf_sts, word_dict, args):
+def train(train_x, train_cola, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_y, train_clf_y, train_clf_sts, train_clf_nli,train_clf_cola, test_x, test_cola,test_xnli1, test_xnli2, test_xsts1, test_xsts2, test_lm_y, test_clf_y, test_clf_nli, test_clf_sts, test_clf_cola, word_dict, args):
     with tf.Session() as sess:
         model = Model(len(word_dict), num_class=14, args=args)
 
@@ -85,4 +85,4 @@ if __name__ == "__main__":
     train_x, train_cola,train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_y, train_clf_y , train_clf_sts, train_clf_nli,train_clf_cola = build_dataset("train", word_dict, args.max_document_len)
     test_x, test_cola,test_xnli1, test_xnli2, test_xsts1, test_xsts2, test_lm_y, test_clf_y , test_clf_sts, test_clf_nli,test_clf_cola  = build_dataset("test", word_dict, args.max_document_len)
 
-    train(train_x, train_cola,train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_y, train_clf_y, train_clf_nli,train_clf_cola, train_clf_sts, test_x, test_cola, test_xnli1, test_xnli2, test_xsts1, test_xsts2, test_lm_y, test_clf_y,test_clf_nli, test_clf_sts, test_clf_cola,word_dict, args)
+    train(train_x, train_cola, train_xnli1, train_xnli2, train_xsts1, train_xsts2, train_lm_y, train_clf_y, train_clf_nli,train_clf_cola, train_clf_sts, test_x, test_cola, test_xnli1, test_xnli2, test_xsts1, test_xsts2, test_lm_y, test_clf_y,test_clf_nli, test_clf_sts, test_clf_cola,word_dict, args)
