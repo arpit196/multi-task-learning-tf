@@ -302,7 +302,8 @@ class Model(object):
             
         with tf.name_scope("cola"):
             self.transform_output,_=stacked_multihead_attention4(self.base_cola,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
-            self.logitscola = tf.layers.dense(self.transform_output, 2)
+            self.meancola=tf.reduce_sum(self.transform_output, axis=1)
+            self.clf_logitscola = tf.layers.dense(self.transform_output, 2)
 
         with tf.name_scope("nli"):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
