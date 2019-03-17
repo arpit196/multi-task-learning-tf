@@ -143,7 +143,7 @@ def build_dataset(step, word_dict, max_document_len):
     clf_cola = list(map(lambda d: d+1, list(df_cola.iloc[:,1])))
 
     clf_y = list(map(lambda d: d - 1, list(df["class"])))
-
+    print(clf_sts)
     return x, xcola, xnli1, xnli2, xsts1, xsts2, lm_y, clf_y, clf_sts, clf_nli, clf_cola
 
 
