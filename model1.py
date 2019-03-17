@@ -302,14 +302,14 @@ class Model(object):
             
         with tf.name_scope("cola"):
             self.transform_output,_=stacked_multihead_attention4(self.base_cola,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
-            self.logitscola = tf.layers.dense(self.transform_output, vocabulary_size)
+            self.logitscola = tf.layers.dense(self.transform_output, 2)
 
         with tf.name_scope("nli"):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
             self.transform_output21,_=stacked_multihead_attention2(self.base_nli1,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training)
             self.transform_output22,_=stacked_multihead_attention2(self.base_nli2,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training,reuse=True)
             self.transform_output23,_=stacked_multihead_attention_d(self.base_nli1,self.base_nli2,num_blocks=1,num_heads=3,use_residual=False,is_training=self.is_training)
-            self.clf_logitsnli = tf.layers.dense(self.transform_output23, num_class)
+            self.clf_logitsnli = tf.layers.dense(self.transform_output23, 3)
             
         with tf.name_scope("sts"):
             #rnn_outputs_flat = tf.reshape(rnn_outputs, [-1, args.max_document_len * self.num_hidden])
@@ -317,7 +317,7 @@ class Model(object):
             #self.clf_logits = tf.layers.dense(self.transform_output2, num_class)
             self.transform_output32,_=stacked_multihead_attention3(self.base_sts2,num_blocks=2,num_heads=3,use_residual=False,is_training=self.is_training,reuse=True)
             self.transform_output33,_=stacked_multihead_attention_d2(self.base_sts1,self.base_sts2,num_blocks=1,num_heads=3,use_residual=False,is_training=self.is_training)
-            self.clf_logitssts= tf.layers.dense(self.transform_output33, num_class)
+            self.clf_logitssts= tf.layers.dense(self.transform_output33, 3)
             
         with tf.name_scope("loss"):
             self.lm_loss = tf.contrib.seq2seq.sequence_loss(
