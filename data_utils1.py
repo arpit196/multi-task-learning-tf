@@ -138,7 +138,7 @@ def build_dataset(step, word_dict, max_document_len):
     
     clf_nli = list(map(lambda d: d , list(df_snli.gold_label.astype('category').cat.codes)))
     
-    clf_sts = list(map(lambda d: d-1, list(df_sts["Score"])))
+    clf_sts = list(map(lambda d: d-2, list(df_sts["Score"])))
     
     clf_cola = list(map(lambda d: d+1, list(df_cola.iloc[:,1])))
 
