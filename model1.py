@@ -6,23 +6,23 @@ def feed_forward(x, num_hiddens, activation=None, reuse=False):
     with tf.variable_scope('feed-forward', reuse=reuse):
         ff = tf.layers.dense(x, num_hiddens, activation=activation, reuse=reuse)
     return ff
-def feed_forward(x, num_hiddens, activation=None, reuse=False):
+def feed_forward2(x, num_hiddens, activation=None, reuse=False):
     with tf.variable_scope('feed-forward2', reuse=reuse):
         ff = tf.layers.dense(x, num_hiddens, activation=activation, reuse=reuse)
     return ff
-def feed_forward(x, num_hiddens, activation=None, reuse=False):
+def feed_forward3(x, num_hiddens, activation=None, reuse=False):
     with tf.variable_scope('feed-forward3', reuse=reuse):
         ff = tf.layers.dense(x, num_hiddens, activation=activation, reuse=reuse)
     return ff
-def feed_forward(x, num_hiddens, activation=None, reuse=False):
+def feed_forward4(x, num_hiddens, activation=None, reuse=False):
     with tf.variable_scope('feed-forward4', reuse=reuse):
         ff = tf.layers.dense(x, num_hiddens, activation=activation, reuse=reuse)
     return ff
-def feed_forward(x, num_hiddens, activation=None, reuse=False):
+def feed_forwardd(x, num_hiddens, activation=None, reuse=False):
     with tf.variable_scope('feed-forwardd', reuse=reuse):
         ff = tf.layers.dense(x, num_hiddens, activation=activation, reuse=reuse)
     return ff
-def feed_forward(x, num_hiddens, activation=None, reuse=False):
+def feed_forwardd2(x, num_hiddens, activation=None, reuse=False):
     with tf.variable_scope('feed-forwardd2', reuse=reuse):
         ff = tf.layers.dense(x, num_hiddens, activation=activation, reuse=reuse)
     return ff
